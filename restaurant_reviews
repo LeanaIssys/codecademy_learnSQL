@@ -1,0 +1,17 @@
+# creating top ten list by review
+SELECT *
+FROM nomnom
+ORDER BY review DESC
+LIMIT 10;
+
+# creating a new column (Review) and changing the rating system from INTEGER to TEXT
+SELECT name,
+  CASE
+    WHEN review > 4.5 THEN 'Extraordinary'
+    WHEN review > 4 THEN 'Excellent'
+    WHEN review > 3 THEN 'Good'
+    WHEN review > 2 THEN 'Fair'
+    ELSE 'Poor'
+  END AS 'Review'
+FROM nomnom;
+
