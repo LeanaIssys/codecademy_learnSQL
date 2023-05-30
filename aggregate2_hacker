@@ -1,0 +1,68 @@
+# find top 5 highest stories
+SELECT title,score
+FROM hacker_news
+ORDER BY score DESC
+LIMIT 5;
+
+Is a small percentage of Hacker News submitters taking the majority of the points?
+
+# find total score of all stories
+SELECT SUM (score)
+FROM hacker_news
+
+# find users who have scored more than 200 and order them from highest to lowest
+SELECT user, SUM (score)
+FROM hacker_news
+GROUP BY user
+HAVING SUM (score) > 200
+ORDER BY 2 DESC;
+
+# add users score togther then divide by total number of scores
+SELECT (517 + 309 + 304 + 282) / 6366.0 ;
+--> around 22%
+
+find trolls
+
+# find users who have posted a link and order them in descending order
+SELECT user,
+  COUNT (*)
+FROM hacker_news
+WHERE URL LIKE "%watch?v=dQw4w9WgXcQ%"
+GROUP BY 1
+ORDER BY 2 DESC;
+
+Which sites feed hacker news the most?
+
+# create a new column with URL's as SOURCE, then count and group by Github, Medium, Ney York Times, and Other
+SELECT CASE
+  WHEN url LIKE '%github%'
+THEN 'Github'
+  WHEN URL LIKE '%medium%'
+THEN 'Medium'
+  WHEN url LIKE '%nytimes%'
+THEN 'New York Times'
+  ELSE 'Other'
+END AS 'Source',
+COUNT (*)
+FROM hacker_news
+GROUP BY 1;
+
+When is the best time to post a story?
+
+# Utilize 'strftime()' to determine what hour of the day the average score is highest
+SELECT strftime('%H', timestamp),
+  AVG (score),
+  COUNT(*)
+FROM hacker_news
+GROUP BY 1
+ORDER BY 2 DESC;
+
+# Rename coloumns of average scores, hour, and number of stories , filter out nulls, and order by highest average score
+SELECT strftime('%H', timestamp) AS'Hour',
+  ROUND(AVG(score), 1) AS 'Average Score',
+  COUNT(*) AS 'Number of Stories'
+FROM hacker_news
+WHERE timestamp IS NOT NULL
+GROUP BY 1
+ORDER BY 2 DESC;
+--> the best times to upload content are 7 am and between the hours of 6-8 pm
