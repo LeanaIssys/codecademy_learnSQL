@@ -1,0 +1,64 @@
+## Examine tables; identify columns and primary keys
+
+SELECT * FROM trips;
+ 
+SELECT * FROM riders;
+ 
+SELECT * FROM cars;
+
+## Create a Trip Log with trips and riders
+
+SELECT trips.date, 
+   trips.pickup, 
+   trips.dropoff, 
+   trips.type, 
+   trips.cost,
+   riders.first, 
+   riders.last,
+   riders.username
+FROM trips
+LEFT JOIN riders 
+  ON trips.rider_id = riders.id;
+  
+## Create a link between trips and cars
+
+SELECT *
+FROM trips
+JOIN cars
+  ON trips.car_id = cars.id;
+  
+## Stack new data together
+
+SELECT *
+FROM riders
+UNION
+SELECT *
+FROM riders2;
+
+## Find the average cost for a trip adn round to 2 decimal places
+
+SELECT ROUND(AVG(cost), 2)
+FROM trips;
+
+## Find users that have used Lyft less than 500 times from all data, including the newest ones
+
+SELECT *
+FROM riders
+WHERE total_trips < 500
+UNION
+SELECT *
+FROM riders2
+WHERE total_trips < 500;
+
+## Calculate the number of cars that are active
+
+SELECT COUNT(*)
+FROM cars
+WHERE status = 'active';
+
+## Find the the highest two cars with the most trips completed
+
+SELECT *
+FROM cars
+ORDER BY trips_completed DESC
+LIMIT 2;
